@@ -65,4 +65,4 @@ def getBestGuess(incompleteWord,ruledOutCharacters):
 # Example: "inf_rm_ti_n"
 # The ruled out characters are represented by a set
 # Example: {'b', 'y'}
-# Example of function call: getBestGuess("inf_rm_tion", {'b', 'y'})
+# Example of function call: getBestGuess("inf_rm_ti_n", {'b', 'y'})
