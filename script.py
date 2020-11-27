@@ -1,4 +1,4 @@
-dictionaryFile = open("/Users/axelhojmark/Dropbox/CODE/PYTHON/hangmanSolver/dictionary.txt", "r")
+dictionaryFile = open("insert file path for dictionary.txt", "r")
 dictionary = dictionaryFile.read().split("\n")
 dictionaryFile.close()
 
