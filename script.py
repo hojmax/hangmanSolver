@@ -150,10 +150,3 @@ if __name__ == '__main__':
     if operation == 'simulate':
         hidden_word = sys.argv[2]
         simulate_game(hidden_word)
-
-# Words are written in small caps
-# Unknown characters are denoted by '_'
-# Example: 'i__o_m__io_'
-# The ruled out characters are represented by a set
-# Example: {'c', 'e'}
-# Example of function call: evaluate('i__o_m__io_', {'c', 'e'})
