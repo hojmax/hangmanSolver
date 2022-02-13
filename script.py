@@ -1,4 +1,5 @@
 import numpy as np
+import sys
 
 
 def get_dictionary():
@@ -52,7 +53,7 @@ def get_best_guess(candidates, used_characters, ruled_out_characters):
         if current in used_characters or current in ruled_out_characters:
             continue
         position_count = dict()
-        for [word, weight] in candidates:
+        for word, weight in candidates:
             indices = tuple([
                 pos for pos, char in enumerate(word) if char == current
             ])
