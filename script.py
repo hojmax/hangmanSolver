@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def getDictionary():
+def get_dictionary():
     data = np.genfromtxt(
         'word_freq.csv',
         dtype=str,
@@ -18,87 +18,87 @@ def getDictionary():
     return data
 
 
-def isPossibleWord(word, incompleteWord, ruledOutCharacters, usedCharacters):
-    if len(word) != len(incompleteWord):
+def is_possible_word(word, incomplete_word, ruled_out_characters, used_characters):
+    if len(word) != len(incomplete_word):
         return False
     for i, e in enumerate(word):
-        if e in ruledOutCharacters:
+        if e in ruled_out_characters:
             return False
-        if incompleteWord[i] != '_' and incompleteWord[i] != e:
+        if incomplete_word[i] != '_' and incomplete_word[i] != e:
             return False
-        if incompleteWord[i] == '_' and e in usedCharacters:
+        if incomplete_word[i] == '_' and e in used_characters:
             return False
     return True
 
 
-def getPossibleWords(incompleteWord, ruledOutCharacters, usedCharacters, candidates):
+def get_possible_words(incomplete_word, ruled_out_characters, used_characters, candidates):
     def word_filter(words):
-        return np.vectorize(isPossibleWord)(words, incompleteWord, ruledOutCharacters, usedCharacters)
+        return np.vectorize(is_possible_word)(words, incomplete_word, ruled_out_characters, used_characters)
     return candidates[word_filter(candidates[:, 0])]
 
 
-def getUsedCharacters(incompleteWord):
-    usedCharacters = set(list(incompleteWord))
-    usedCharacters.remove('_')
-    return usedCharacters
+def get_used_characters(incomplete_word):
+    used_characters = set(list(incomplete_word))
+    used_characters.remove('_')
+    return used_characters
 
 
-def getBestGuess(candidates, usedCharacters, ruledOutCharacters):
-    bestCharacter = ''
-    bestExpectedValue = float('inf')
-    totalWeight = np.sum(candidates[:, 1])
+def get_best_guess(candidates, used_characters, ruled_out_characters):
+    best_character = ''
+    best_expected_value = float('inf')
+    total_weight = np.sum(candidates[:, 1])
     for i in range(26):
         current = chr(97+i)
-        if current in usedCharacters or current in ruledOutCharacters:
+        if current in used_characters or current in ruled_out_characters:
             continue
-        positionCount = dict()
+        position_count = dict()
         for [word, weight] in candidates:
             indices = tuple([
                 pos for pos, char in enumerate(word) if char == current
             ])
             if len(indices) == 0:
                 continue
-            if indices in positionCount:
-                currentWeight, currentCount = positionCount[indices]
-                positionCount[indices] = (
-                    currentWeight + weight,
-                    currentCount + 1
+            if indices in position_count:
+                current_weight, current_count = position_count[indices]
+                position_count[indices] = (
+                    current_weight + weight,
+                    current_count + 1
                 )
             else:
-                positionCount[indices] = (weight, 1)
-        if len(positionCount) == 0:
+                position_count[indices] = (weight, 1)
+        if len(position_count) == 0:
             continue
-        expectedValue = 0
-        remainingWeight = totalWeight
-        remainingCount = len(candidates)
-        for weight, count in positionCount.values():
-            expectedValue += weight / totalWeight * count
-            remainingWeight -= weight
-            remainingCount -= count
-        expectedValue += remainingWeight / totalWeight * remainingCount
-        if expectedValue < bestExpectedValue:
-            bestExpectedValue = expectedValue
-            bestCharacter = current
-    return (bestCharacter, bestExpectedValue)
+        expected_value = 0
+        remaining_weight = total_weight
+        remaining_count = len(candidates)
+        for weight, count in position_count.values():
+            expected_value += weight / total_weight * count
+            remaining_weight -= weight
+            remaining_count -= count
+        expected_value += remaining_weight / total_weight * remaining_count
+        if expected_value < best_expected_value:
+            best_expected_value = expected_value
+            best_character = current
+    return (best_character, best_expected_value)
 
 
-def evaluate(incompleteWord, ruledOutCharacters):
-    dictionary = getDictionary()
-    usedCharacters = getUsedCharacters(incompleteWord)
-    candidates = getPossibleWords(
-        incompleteWord,
-        ruledOutCharacters,
-        usedCharacters,
+def evaluate(incomplete_word, ruled_out_characters):
+    dictionary = get_dictionary()
+    used_characters = get_used_characters(incomplete_word)
+    candidates = get_possible_words(
+        incomplete_word,
+        ruled_out_characters,
+        used_characters,
         dictionary
     )
     if len(candidates) == 0:
         return print('No matches: Either the word is not in the dictionary or the input is incorrect.')
     if len(candidates) == 1:
         return print(f'The answer is: {candidates[0][0]}')
-    guess, expected = getBestGuess(
+    guess, expected = get_best_guess(
         candidates,
-        usedCharacters,
-        ruledOutCharacters
+        used_characters,
+        ruled_out_characters
     )
     print(f'Number of Candidates: {len(candidates)}')
     print(f'Expected Number of Candidates After Move: {expected}')
@@ -108,33 +108,33 @@ def evaluate(incompleteWord, ruledOutCharacters):
 def simulate_game(hidden_word):
     word_set = set(list(hidden_word))
     guessed = set()
-    candidates = getDictionary()
+    candidates = get_dictionary()
 
     def obfuscate(word):
         return ''.join([e if e in guessed else '_' for e in word])
 
     while True:
-        incompleteWord = obfuscate(hidden_word)
-        usedCharacters = guessed.intersection(word_set)
-        ruledOutCharacters = guessed.difference(word_set)
-        candidates = getPossibleWords(
-            incompleteWord,
-            ruledOutCharacters,
-            usedCharacters,
+        incomplete_word = obfuscate(hidden_word)
+        used_characters = guessed.intersection(word_set)
+        ruled_out_characters = guessed.difference(word_set)
+        candidates = get_possible_words(
+            incomplete_word,
+            ruled_out_characters,
+            used_characters,
             candidates
         )
-        print(incompleteWord)
+        print(incomplete_word)
         print()
         if len(candidates) == 0:
             return print('No matches: Either the word is not in the dictionary or the input is incorrect.')
         if len(candidates) == 1:
             print(f'The answer is: {candidates[0][0]}')
-            print(f'Incorrect guesses: {len(ruledOutCharacters)}')
+            print(f'Incorrect guesses: {len(ruled_out_characters)}')
             return
-        guess, expected = getBestGuess(
+        guess, expected = get_best_guess(
             candidates,
-            usedCharacters,
-            ruledOutCharacters
+            used_characters,
+            ruled_out_characters
         )
         print(f'Guess: {guess}')
         guessed.add(guess)
