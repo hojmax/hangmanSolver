@@ -141,6 +141,16 @@ def simulate_game(hidden_word):
         guessed.add(guess)
 
 
+if __name__ == '__main__':
+    operation = sys.argv[1]
+    if operation == 'evaluate':
+        incomplete_word = sys.argv[2]
+        ruled_out_characters = set(sys.argv[3:])
+        evaluate(incomplete_word, ruled_out_characters)
+    if operation == 'simulate':
+        hidden_word = sys.argv[2]
+        simulate_game(hidden_word)
+
 # Words are written in small caps
 # Unknown characters are denoted by '_'
 # Example: 'i__o_m__io_'
