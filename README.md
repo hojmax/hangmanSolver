@@ -7,4 +7,21 @@ Number of Candidates: 17038
 Expected Number of Candidates After Move: 1275.809674464681
 Best Guess: e
 hangmanSolver % python script.py evaluate ___________ e
+Number of Candidates: 3951
+Expected Number of Candidates After Move: 260.3057366762242
+Best Guess: i
+hangmanSolver % python script.py evaluate i_______i__ e
+Number of Candidates: 44
+Expected Number of Candidates After Move: 7.985458094476008
+Best Guess: o
+hangmanSolver % python script.py evaluate i__o____io_ e
+Number of Candidates: 11
+Expected Number of Candidates After Move: 2.005721347970188
+Best Guess: m
+hangmanSolver % python script.py evaluate i__o_m__io_ e
+Number of Candidates: 2
+Expected Number of Candidates After Move: 1.0
+Best Guess: c
+hangmanSolver % python script.py evaluate i__o_m__io_ e c
+The answer is: information
 ```
