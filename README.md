@@ -31,4 +31,4 @@ Best Guess: c
 hangmanSolver % python script.py evaluate i__o_m__io_ e c
 The answer is: information
 ```
-You can also simulate a game of hangman by running ```python script.py simulate **word_of_choice**```.
+You can also simulate a game of hangman with a word of choice by running ```python script.py simulate **word_of_choice**```. This is primarily for evaluating performance and testing.
