@@ -100,7 +100,6 @@ def evaluate(incompleteWord, ruledOutCharacters):
         usedCharacters,
         ruledOutCharacters
     )
-    print(candidates)
     print(f'Number of Candidates: {len(candidates)}')
     print(f'Expected Number of Candidates After Move: {expected}')
     print(f'Best Guess: {guess}')
