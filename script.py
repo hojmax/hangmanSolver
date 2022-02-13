@@ -47,6 +47,7 @@ def get_used_characters(incomplete_word):
 def get_best_guess(candidates, used_characters, ruled_out_characters):
     best_character = ''
     best_expected_value = float('inf')
+    best_probability = 0
     total_weight = np.sum(candidates[:, 1])
     for i in range(26):
         current = chr(97+i)
@@ -72,14 +73,17 @@ def get_best_guess(candidates, used_characters, ruled_out_characters):
         expected_value = 0
         remaining_weight = total_weight
         remaining_count = len(candidates)
+        probability_correct = 0
         for weight, count in position_count.values():
             expected_value += weight / total_weight * count
+            probability_correct += weight / total_weight
             remaining_weight -= weight
             remaining_count -= count
         expected_value += remaining_weight / total_weight * remaining_count
-        if expected_value < best_expected_value:
+        if expected_value < best_expected_value or (expected_value == best_expected_value and probability_correct > best_probability):
             best_expected_value = expected_value
             best_character = current
+            best_probability = probability_correct
     return (best_character, best_expected_value)
 
 
