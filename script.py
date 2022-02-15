@@ -1,4 +1,5 @@
 import numpy as np
+import string
 import sys
 
 
@@ -49,14 +50,13 @@ def get_best_guess(candidates, used_characters, ruled_out_characters):
     best_expected_value = float('inf')
     best_probability = 0
     total_weight = np.sum(candidates[:, 1])
-    for i in range(26):
-        current = chr(97+i)
-        if current in used_characters or current in ruled_out_characters:
+    for letter in string.ascii_lowercase:
+        if letter in used_characters or letter in ruled_out_characters:
             continue
         position_count = dict()
         for word, weight in candidates:
             indices = tuple([
-                pos for pos, char in enumerate(word) if char == current
+                pos for pos, char in enumerate(word) if char == letter
             ])
             if len(indices) == 0:
                 continue
@@ -82,7 +82,7 @@ def get_best_guess(candidates, used_characters, ruled_out_characters):
         expected_value += remaining_weight / total_weight * remaining_count
         if expected_value < best_expected_value or (expected_value == best_expected_value and probability_correct > best_probability):
             best_expected_value = expected_value
-            best_character = current
+            best_character = letter
             best_probability = probability_correct
     return (best_character, best_expected_value)
 
