@@ -105,6 +105,9 @@ def evaluate(incomplete_word, ruled_out_characters):
         used_characters,
         ruled_out_characters
     )
+    print('Top candidates:')
+    for i in range(min(len(candidates), 5)):
+        print(f'\t{candidates[i][0]} ({candidates[i][1]})')
     print(f'Number of Candidates: {len(candidates)}')
     print(f'Expected Number of Candidates After Move: {expected}')
     print(f'Best Guess: {guess}')
